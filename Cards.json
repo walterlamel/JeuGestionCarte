@@ -1,0 +1,24 @@
+[
+    {
+        "id": "soldat",
+        "number_in_deck" : 10,
+        "nom" : "Soldat",
+        "desc" : "Membre de la garde, il vous protégera des attaques extérieures.",
+        "cost" : 1,
+        "type" : "unity",
+        "attack" : 1,
+        "defense" : 0,
+        "life" : 3
+    },
+    {
+        "id": "walls",
+        "number_in_deck" : 3,
+        "nom" : "Mur d'enceinte",
+        "desc" : "Ce mur d'enceinte encercle votre ville et vous protège des attaques inattendues.",
+        "cost" : 5,
+        "type" : "building",
+        "attack" : 0,
+        "defense" : 5,
+        "life" : 5
+    }
+]
