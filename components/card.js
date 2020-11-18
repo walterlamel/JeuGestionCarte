@@ -1,7 +1,7 @@
-export default class Card extends HTMLDivElement{
+export default class Card{
 
     constructor(card, in_face, where){
-        super()
+        this.infos = card
 
         this.face = document.createElement("div")
         this.face.classList.add('inner')
@@ -24,104 +24,23 @@ export default class Card extends HTMLDivElement{
         this.face.innerHTML = card.name + "<br/><br/>" + card.desc
 
 
-
-        //creation du style
-       let shadow = this.attachShadow({mode: 'open'});
-       var style = document.createElement('style')
-       style.textContent = `
-.card {
-    perspective: 1000px;
-    height: 300px;
-    width:200px;
-    position:relative;
-    z-index : 3;
-    transition: transform 0.2s ease-in;
-}
-
-.box_inner{
-    height: 100%;
-    width:100%;
-    position: relative;
-    display:flex;
-    flex-direction:column;
-    justify-content : center;
-    align-items : center;
-    transition: transform 0.5s;
-    transform-style: preserve-3d;
-    text-align:center;
-}
-
-.card_devoile .box_inner{
-    transform: rotateY(180deg);
-}
-
-.card_clickable{
-    cursor:pointer;
-}
-
-.card_clickable:hover{
-    transform : translateY(45px);
-}
-
-.handle:hover{
-    transform : translateY(-45px);
-    cursor:pointer;
-}
-
-.card .inner {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display:flex;
-    flex-direction:column;
-    justify-content : center;
-    align-items : center;
-    border-radius:7%;
-    box-shadow:2px 2px 10px rgba(0, 0, 0, 0.5);
-    padding:15px;
-}
-
-.card .face{
-    z-index: 1;
-    background-color:rgb(241, 241, 229);
-}
-
-.card .dos{
-    z-index: 2;
-    background-color:rgba(0, 0, 100, 1);
-    transform: rotateY(180deg);
-}
-       `
-       shadow.appendChild(style)
-       shadow.appendChild(this.contain)
-
-
        if(!in_face){
         this.contain.classList.add("card_devoile")
        }
 
-       switch(where){
-           case "hand" :
-               this.contain.classList.add("handle")
-               break;
-            case "pioche" :
-                this.become_clickable()
-                break;
-       }
+       this.become_clickable()
     }
 
 
     become_clickable(){
         this.contain.classList.add("card_clickable")
-        this.contain.addEventListener('click', this.return_card.bind(this), true)
     }
 
     remove_clickable(){
         this.contain.classList.remove("card_clickable")
-        this.contain.removeEventListener('click', this.return_card.bind(this), true)
     }
 
+    /***************************************************** ANIMATION */
 
     return_card(){
         if(this.contain.className.indexOf("card_devoile") >= 0){
@@ -129,10 +48,34 @@ export default class Card extends HTMLDivElement{
         } else {
             this.contain.classList.add("card_devoile")
         }
-        this.remove_clickable()
     }
 
-    move(x, y){
-        this.style = "transition:all 0.5s linear;transform:translate("+x+"px,"+y+"px);"
+    card_appear_hors_champs(){
+        this.style = "bottom : -100px"
+    }
+
+    anim_use(){
+        return new Promise((r, f) => {
+            this.remove_clickable()
+            this.contain.animate([
+                { transform : "translateY(100px)" },
+                { transform : "scale(1.2)"}
+            ], {
+                duration : 200,
+                fill : "forwards"
+            })
+
+            setTimeout(() => {
+                $(this.contain).fadeOut("slow", function(e){
+                    r(true)
+                })
+            }, 300);
+        })
+    }
+
+
+    /***************************************************** SET */
+    set_use(on_off){
+        this.usable = on_off ? true : false
     }
 }

@@ -32,10 +32,9 @@
     bottom: -15vh;
 }
 
-.handle > div:hover{
+.handle > .card_clickable:hover{
     margin-bottom:190px;
 }
-
 
 .card {
     perspective: 1000px;
@@ -64,15 +63,6 @@
 }
 
 .card_clickable{
-    cursor:pointer;
-}
-
-.card_clickable:hover{
-    transform : translateY(45px);
-}
-
-.handle:hover{
-    transform : translateY(-45px);
     cursor:pointer;
 }
 
